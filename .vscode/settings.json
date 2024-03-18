@@ -1,0 +1,11 @@
+{
+    "material-icon-theme.folders.associations": {
+        "calendar": "Context",
+        "profile": "dist",
+        "teams": "Shared",
+        "meetings":"Review",
+        "members":"Client",
+        "cards":"Class",
+        "input":"Helper",
+    }
+}

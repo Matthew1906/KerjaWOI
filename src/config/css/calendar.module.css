@@ -1,0 +1,19 @@
+.fc-toolbar-title {
+  font-size: 1.25rem !important;
+}
+
+.fc-button {
+  background-color: #8985f2 !important;
+  border: transparent !important;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  border-radius: 100% !important;
+  aspect-ratio: 1 !important;
+}
+
+.fc-daygrid-event {
+  cursor: pointer !important;
+  background-color: #716df233;
+}
