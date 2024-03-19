@@ -1,6 +1,6 @@
 import { TeamHeader } from "@/components/content/teams";
 import { Breadcrumbs, Title } from "@/components/utils";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 export default function RootLayout({ children, params }) {
     const paths = [{ name: "Teams", to: "/teams" }, { name: "Team Sekrum" }];

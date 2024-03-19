@@ -4,7 +4,7 @@ import { AiFillCalendar } from "react-icons/ai";
 import { IoLocation } from "react-icons/io5";
 import { HiClock } from "react-icons/hi";
 import Button from "@/components/utils/Button";
-import { poppins_600 } from "@/config/font";
+import { poppins_600 } from "@/app/lib/font";
 import { MemberList } from "../members";
 
 

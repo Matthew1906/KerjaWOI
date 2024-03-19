@@ -1,7 +1,6 @@
-import { hash } from "bcrypt";
-import { prisma } from "../prisma";
 import slugify from "slugify";
-import { useRouter } from "next/navigation";
+import { hash } from "bcrypt";
+import { prisma } from "../lib/prisma";
 
 export const registerUser = async(userData)=>{
     const { name, email, password } = userData;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { BsArrowRightCircle } from "react-icons/bs";
-import { poppins_600, poppins_700 } from "@/config/font";
+import { poppins_600, poppins_700 } from "@/app/lib/font";
 
 const DeadlineCard = ({ team, desc, date, time, purpose, attendees, link }) => {
   return (

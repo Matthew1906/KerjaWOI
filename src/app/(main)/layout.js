@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 import KerjaWoiIcon from "../../../public/svg/KerjaWoiIcon";
 import DashboardIcon from "../../../public/svg/DashboardIcon";
 import TeamIcon from "../../../public/svg/TeamIcon";

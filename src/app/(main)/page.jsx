@@ -1,7 +1,7 @@
 import { DeadlineBoard } from "@/components/content/events"
 import { Title } from "@/components/utils";
-import { poppins_700 } from "@/config/font";
-import { meetings, deadlines } from "@/config/utils/data";
+import { poppins_700 } from "@/app/lib/font";
+import { meetings, deadlines } from "@/app/lib/utils/data";
 import { getServerSession } from "next-auth";
 
 const Dashboard = async() => {

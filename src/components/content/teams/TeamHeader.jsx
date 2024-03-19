@@ -7,7 +7,7 @@ import {
   BsGearFill,
 } from "react-icons/bs";
 import Link from "next/link";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const TeamHeader = ({team}) => {
   return (

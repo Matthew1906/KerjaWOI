@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "../utils"
-import { registerUser } from "@/app/lib/controllers/user"
+import { registerUser } from "@/app/controllers/user"
 import { redirect } from "next/navigation"
 
 const inputClass = 'rounded-md border-2 border-solid border-gray-200 outline-nonebg-dark-white placeholder:text-dark-purple placeholder:opacity-50 py-2 px-4 w-full hover:border-dark-purple focus:ring'

@@ -1,5 +1,5 @@
 import { MeetingFilters, MeetingPagination } from "@/components/content/meetings";
-import { meetings } from "@/config/utils/data";
+import { meetings } from "@/app/lib/utils/data";
 
 const Meeting = () => {
   return (

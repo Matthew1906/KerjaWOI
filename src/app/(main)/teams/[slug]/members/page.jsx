@@ -1,5 +1,5 @@
 import { MemberFilters, MemberTable } from "@/components/content/members";
-import { members } from "@/config/utils/data";
+import { members } from "@/app/lib/utils/data";
 
 const Members = async({ admin }) => {
   return (

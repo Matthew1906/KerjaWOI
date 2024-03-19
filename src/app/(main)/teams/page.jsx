@@ -1,7 +1,7 @@
 import { TeamFilters, TeamPagination } from "@/components/content/teams";
 import { Breadcrumbs, Title } from "@/components/utils";
-import { poppins_700 } from "@/config/font";
-import { teams } from "@/config/utils/data";
+import { poppins_700 } from "@/app/lib/font";
+import { teams } from "@/app/lib/utils/data";
 
 const Teams = async() => {
   const paths = [{ name: "Teams" }];

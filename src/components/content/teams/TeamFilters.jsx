@@ -4,7 +4,7 @@ import TeamModal from "./TeamModal";
 import { useState } from "react";
 import { SearchFilter } from "@/components/input";
 import { Button } from "@/components/utils";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const TeamFilters = ()=>{
     const [addTeam, setAddTeam] = useState(false);

@@ -1,7 +1,7 @@
 import { Title } from "@/components/utils";
 import DeadlineCard from "./DeadlineCard";
 import styles from "@/config/css/scrollbar.module.css"
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const DeadlineBoard = ({ title, deadlines, purpose }) => {
     return (

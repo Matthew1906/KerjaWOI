@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MemberList }from "@/components/content/members";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const TeamCard = ({name, slug, lead, members, last_update}) => {
   return (

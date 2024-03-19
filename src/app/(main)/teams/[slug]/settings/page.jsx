@@ -1,6 +1,6 @@
 import { Button } from "@/components/utils";
 import { TeamNameEdit, TeamNotificationEdit, TeamPermissionEdit } from "./(settings)";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const Settings = ({params}) => {
   return (

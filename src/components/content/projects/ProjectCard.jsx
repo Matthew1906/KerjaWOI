@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { poppins_700 } from "@/config/font";
+import { poppins_700 } from "@/app/lib/font";
 
 const ProjectCard = ({name, desc}) => {
   return (

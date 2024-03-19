@@ -4,7 +4,7 @@ import { useState } from "react"
 import ProjectModal from "./ProjectModal"
 import { SearchFilter } from "@/components/input"
 import { Button } from "@/components/utils"
-import { poppins_700 } from "@/config/font"
+import { poppins_700 } from "@/app/lib/font"
 
 const ProjectFilters = ()=>{
     const [addProject, setAddProject] = useState(false);
