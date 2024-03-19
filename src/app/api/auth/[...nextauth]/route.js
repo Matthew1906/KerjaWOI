@@ -4,23 +4,15 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 export const authOptions = {
+    pages:{
+        signIn: '/login'
+    },
     session:{
         strategy: 'jwt'
     },
     providers: [
         Credentials({
-            name: 'Sign in',
-            credentials:{
-                email: {
-                    label:'Email',
-                    type:'email',
-                    placeholder:'hello@example.com'
-                },
-                password: {
-                    label:'Password',
-                    type:'password'
-                }
-            },
+            name: 'Credentials',
             async authorize(credentials){
                 'use server'
                 if(!credentials?.email || !credentials?.password){
@@ -45,7 +37,18 @@ export const authOptions = {
             }
         })
     ],
-    secret : process.env.NEXTAUTH_SECRET
+    secret : process.env.NEXTAUTH_SECRET,
+    callbacks: {
+        session:({session, token})=>{
+            return token;
+        },
+        jwt:({token, user})=>{
+            if(user){
+                return {...token, id:user.id, slug:user.slug}
+            }
+            return token;
+        }
+    }
 }
 
 const handler = NextAuth(authOptions);
