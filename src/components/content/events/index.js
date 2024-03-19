@@ -1,4 +1,4 @@
 import Calendar from "./Calendar";
-import DeadlineCard from "./DeadlineCard";
+import DeadlineBoard from "./DeadlineBoard";
 
-export { Calendar, DeadlineCard };
+export { Calendar, DeadlineBoard };

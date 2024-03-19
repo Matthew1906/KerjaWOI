@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(cuid())
+  name         String       @db.VarChar(200)
+  slug         String       @unique @db.VarChar(200)
+  email        String       @unique @db.VarChar(100)
+  password     String
+  dob          DateTime?    @db.Date()
+  profileImage String?
+  teams        TeamMember[]
+  @@map("users")
+}
+
+enum Notification {
+  D1
+  D3
+  D5
+  W1
+}
+
+enum Permission {
+  EDIT
+  VIEW
+}
+
+model Team {
+  name         String       @unique @db.VarChar(200)
+  slug         String       @id @db.VarChar(200)
+  notification Notification @default(W1)
+  permission   Permission   @default(EDIT)
+  projects     Project[]
+  members      TeamMember[]
+  meetings     Meeting[]
+
+  @@map("teams")
+}
+
+enum TeamPosition {
+  CLIENT
+  LEAD
+  MEMBER
+  COLLABORATOR
+}
+
+model TeamMember {
+  id       Int           @unique @default(autoincrement())
+  user     User          @relation(fields: [userName], references: [slug])
+  userName String
+  team     Team          @relation(fields: [teamName], references: [slug])
+  teamName String
+  position TeamPosition  @default(MEMBER)
+  meetings Participant[]
+  tasks    Task[]
+
+  @@id([userName, teamName])
+  @@map("team_members")
+}
+
+enum MeetingType {
+  ONLINE
+  OFFLINE
+}
+
+model Meeting {
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(50)
+  team        Team          @relation(fields: [teamName], references: [slug])
+  teamName    String
+  startDate   DateTime
+  endDate     DateTime
+  meetingType MeetingType   @default(ONLINE)
+  location    String
+  participant Participant[]
+
+  @@map("meetings")
+}
+
+model Participant {
+  meeting   Meeting    @relation(fields: [meetingId], references: [id])
+  meetingId Int
+  member    TeamMember @relation(fields: [memberId], references: [id])
+  memberId  Int
+
+  @@id([meetingId, memberId])
+  @@map("participants")
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  team        Team      @relation(fields: [teamName], references: [slug])
+  teamName    String
+  name        String    @db.VarChar(200)
+  slug        String    @unique @db.VarChar(200)
+  description String?
+  sections    Section[]
+
+  @@map("projects")
+}
+
+model Section {
+  id        Int     @id @default(autoincrement())
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  title     String  @db.VarChar(100)
+  tasks     Task[]
+
+  @@map("project_sections")
+}
+
+model Task {
+  id               Int          @id @default(autoincrement())
+  section          Section      @relation(fields: [sectionId], references: [id])
+  sectionId        Int
+  title            String       @db.VarChar(100)
+  description      String?
+  responsibility   TeamMember   @relation(fields: [responsibilityId], references: [id])
+  responsibilityId Int
+  attachments      Attachment[]
+
+  @@map("project_tasks")
+}
+
+model Attachment {
+  id     Int   @id @default(autoincrement())
+  task   Task  @relation(fields: [taskId], references: [id])
+  taskId Int
+  file   Bytes
+}
