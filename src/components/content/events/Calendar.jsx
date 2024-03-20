@@ -1,11 +1,11 @@
 'use client'
 
+import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import EventModal from "./EventModal";
-import { useState } from "react";
 
 const Calendar = () => {
   const [eventModal, setEventModal] = useState(false);

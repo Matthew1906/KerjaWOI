@@ -1,4 +1,4 @@
-import { prisma } from "@/app/lib/prisma";
+import prisma from "@/app/lib/prisma";
 import { compare } from "bcrypt";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -16,17 +16,23 @@ export const authOptions = {
             async authorize(credentials){
                 'use server'
                 if(!credentials?.email || !credentials?.password){
-                    return null;
+                    return {
+                        error: 'empty'
+                    };
                 }
                 const user = await prisma.user.findUnique({
                    where:{ email: credentials.email } 
                 })
                 if(!user){
-                    return null;
+                    return { 
+                        error: "email"
+                    };
                 }
                 const isValid = await compare(credentials.password, user.password)
                 if(!isValid){
-                    return null;
+                    return {
+                        error: "password"
+                    };
                 }
                 return {
                     id: user.id +"",
@@ -47,6 +53,18 @@ export const authOptions = {
                 return {...token, id:user.id, slug:user.slug}
             }
             return token;
+        }, 
+        signIn({ user, account, profile, email, credentials }) {
+            if(user?.error == 'empty'){
+                throw new Error('Credentials must not be empty')
+            }
+            else if (user?.error == 'email') {
+                throw new Error('Invalid email address')
+            }
+            else if (user?.error == 'password') {
+                throw new Error('Invalid password')
+            }
+            return true;
         }
     }
 }

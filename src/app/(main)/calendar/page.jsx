@@ -1,5 +1,5 @@
 import { Calendar } from "@/components/content/events";
-import "@/config/css/calendar.module.css";
+import "@/app/lib/css/calendar.module.css";
 
 const CalendarPage = () => {
   return (

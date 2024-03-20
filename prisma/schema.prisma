@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  id           String       @id @default(cuid())
-  name         String       @db.VarChar(200)
-  slug         String       @unique @db.VarChar(200)
-  email        String       @unique @db.VarChar(100)
-  password     String
-  dob          DateTime?    @db.Date()
-  profileImage String?
-  teams        TeamMember[]
+  id             String       @id @default(cuid())
+  name           String       @db.VarChar(200)
+  slug           String       @unique @db.VarChar(200)
+  email          String       @unique @db.VarChar(100)
+  password       String
+  dob            DateTime?    @db.Date()
+  profileImage   String?
+  profileImageId String?
+  teams          TeamMember[]
+
   @@map("users")
 }
 
@@ -62,6 +64,7 @@ model TeamMember {
   userName String
   team     Team          @relation(fields: [teamName], references: [slug])
   teamName String
+  pending  Boolean       @default(true)
   position TeamPosition  @default(MEMBER)
   meetings Participant[]
   tasks    Task[]
