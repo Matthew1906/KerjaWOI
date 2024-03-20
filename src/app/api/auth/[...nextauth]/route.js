@@ -38,7 +38,8 @@ export const authOptions = {
                     id: user.id +"",
                     email: user.email,
                     name: user.name,
-                    slug: user.slug
+                    slug: user.slug,
+                    profileImage: user.profileImage
                 }
             }
         })
@@ -50,7 +51,7 @@ export const authOptions = {
         },
         jwt:({token, user})=>{
             if(user){
-                return {...token, id:user.id, slug:user.slug}
+                return {...token, id:user.id, slug:user.slug, profileImage:user.profileImage}
             }
             return token;
         }, 

@@ -32,14 +32,7 @@ const TeamPagination = ({teams})=>{
         <>
         <div className="z-10 flex flex-row gap-10 flex-wrap justify-center p-2 mt-2">
             {teams.slice((current - 1) * 6, current * 6).map((team, key) => (
-                <TeamCard
-                    key={key}
-                    name={team.name}
-                    lead={team.lead}
-                    members={team.members}
-                    last_update={team.last_update}
-                    slug={team.slug}
-                />
+                <TeamCard key={key} team={team} />
             ))}
             </div>
             <PageIndicator

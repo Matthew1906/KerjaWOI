@@ -3,7 +3,9 @@
 import slugify from "slugify";
 import { hash } from "bcrypt";
 import prisma from "../lib/prisma";
+import { uploadImage } from "../lib/imagekit";
 
+// Create User
 export const registerUser = async(userData)=>{
     const { name, email, password } = userData;
     const hashedPassword = await hash(password, 13);
@@ -22,6 +24,7 @@ export const registerUser = async(userData)=>{
     return true;
 }
 
+// Read User
 export const getUser = async(slug)=>{
     const user = await prisma.user.findUnique({ 
         where: { slug: slug },
@@ -29,8 +32,25 @@ export const getUser = async(slug)=>{
             name:true,
             email:true,
             dob:true,
-            profileImage:true
+            profileImage:true,
+            slug:true
         }
     })
     return user;
+}
+
+// Update User
+export const updateUser = async(data)=>{
+    const { name, slug, dob, image } = data;
+    const {imageId, image:imageResult} = await uploadImage(image, `${slug}.jpg`, 'users');
+    await prisma.user.update({
+        where: { slug: slug },
+        data: {
+            name:name,
+            dob:new Date(dob),
+            profileImage: imageResult,
+            profileImageId: imageId
+        }
+    })
+    return true;
 }

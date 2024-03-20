@@ -43,7 +43,7 @@ export default async function RootLayout({ children }) {
         </div>
         <div className="flex flex-row items-center gap-6 p-4 border-t-[1px] border-dark-blue border-opacity-80">
           <Image
-            src="/profile.jpg"
+            src={session.profileImage??"/profile.jpg"}
             alt="Profile"
             width={50}
             height={50}

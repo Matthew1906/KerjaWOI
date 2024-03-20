@@ -1,23 +1,42 @@
 'use client'
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import BaseModal from "../BaseModal";
 import Button from "@/components/utils/Button";
-import TextInput from "@/components/input/TextInput";
+import { createTeam } from "@/app/controllers/team";
+import { poppins_600 } from "@/app/lib/font";
+import { useRouter } from "next/navigation";
 
 const TeamModal = ({ show, onHideModal, onSubmit }) => {
-  const [teamName, setTeamName] = useState("");
-  const onChange=(e)=>setTeamName(e);
-  const submit = (teamName)=>onSubmit(teamName);
-  const submitFromButton = ()=>onSubmit(teamName);
+  const formRef = useRef();
+  const [ error, setError ] = useState(false);
+  const router = useRouter()
+  const handleSubmit = async(event)=>{
+    event.preventDefault();
+    setError(false);
+    const formData = new FormData(event.currentTarget);
+    const result = await createTeam({teamName:formData.get('teamName')})
+    if(!result){
+      setError('Team name already exist!')
+    }
+    formRef.current.reset();
+    router.refresh();
+    onSubmit()
+  }
   return (
     <BaseModal show={show} onHideModal={onHideModal} className="w-5/12">
-      <div className="text-dark-purple">
+      <form ref={formRef} className="text-dark-purple" onSubmit={handleSubmit}>
         <h3 className="text-center text-xl font-semibold mb-10">Create New Team</h3>
-        <label className="text-lg font-semibold mb-2">Team Name: </label>
-        <TextInput placeholder="" submit={submit} onChange={onChange} className='my-5 w-100 bg-dark-white'/>
-        <Button color="dark-purple" onClick={submitFromButton}className='float-right'>Create</Button>
-      </div>
+        <label htmlFor='name' className="text-lg font-semibold mb-2">Team Name: </label>
+        <input
+          type="text"
+          name='teamName'
+          placeholder="Enter team name"
+          className='grow outline-none p-2 rounded-md drop-shadow my-5 w-100 bg-dark-white'
+        />
+        {error && <div><p className={`text-left text-Orange ${poppins_600.className}`}>{error}</p></div>}
+        <Button color="dark-purple" className='float-right'>Create</Button>
+      </form>
     </BaseModal>
   );
 };
