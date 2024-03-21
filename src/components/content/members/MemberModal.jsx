@@ -1,53 +1,55 @@
 'use client'
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import BaseModal from "../BaseModal";
-import { TextInput } from "@/components/input";
 import { Button } from "@/components/utils";
+import { useRouter } from "next/navigation";
+import { poppins_600 } from "@/app/lib/font";
+import { inviteTeamMember } from "@/app/controllers/team";
 
-const MemberModal = ({ show, onHideModal, onSubmit }) => {
-  const [peopleDetail, setPeopleDetail] = useState({});
-  const [validate, setValidate] = useState(false);
-  const changeEmail = (value) => {
-    setValidate(false);
-    setPeopleDetail((prev) => ({ ...prev, email: value }));
-  };
-  const changeMessage = (value) => {
-    setValidate(false);
-    setPeopleDetail((prev) => ({ ...prev, message: value }));
-  };
-  const submit = () => {
-    if (peopleDetail.email === undefined) {
-      setValidate(true);
-    } else {
-      onSubmit(peopleDetail);
+const MemberModal = ({ slug, show, onHideModal, onSubmit }) => {
+  const formRef = useRef();
+  const [ error, setError ] = useState(false);
+  const router = useRouter()
+  const handleSubmit = async(event)=>{
+    event.preventDefault();
+    setError(false);
+    const formData = new FormData(event.currentTarget);
+    const result = await inviteTeamMember({team:slug, email:formData.get('email')})
+    if(!result?.status){
+      setError(result.message)
     }
-  };
+    else{
+      formRef.current.reset();
+      router.refresh();
+      onSubmit()
+    }
+    
+  }
   return (
-    <BaseModal show={show} onHideModal={onHideModal} className="w-5/12">
-      <div className="text-black">
-        <h3 className="text-center text-xl font-semibold mb-5">Add Project</h3>
-        {validate && (
-          <p className="p-2 rounded-md bg-[#FF0000]/50 text-white mb-3">
-            You need to input email!!
-          </p>
-        )}
-        <label className="text-lg font-semibold mb-2">Email: </label>
-        <TextInput
-          placeholder=""
-          onChange={changeEmail}
-          className="my-5 w-100 bg-dark-white"
+    <BaseModal show={show} onHideModal={()=>{
+      setError(false);
+      onHideModal()
+    }} className="w-5/12">
+      <form className="text-black block" ref={formRef} onSubmit={handleSubmit}>
+        <h3 className="text-center text-xl font-semibold mb-5">Add Member to Team</h3>
+        <label htmlFor='email' className="text-lg font-semibold mb-2">Email: </label>
+        <input
+          type="email"
+          name='email'
+          placeholder="Enter email"
+          className="grow outline-none p-2 rounded-md drop-shadow my-5 w-100 bg-dark-white"
+          required
         />
-        <label className="text-lg font-semibold mb-2">Message: </label>
-        <TextInput
-          placeholder=""
-          onChange={changeMessage}
-          className="my-5 w-100 h-24 bg-dark-white"
-        />
-        <Button color="dark-purple" onClick={submit} className="float-right">
+        <div>
+        {error && 
+          <p className={`text-left text-Orange ${poppins_600.className}`}>{error}</p>
+        }
+        </div>
+        <Button color="dark-purple" className='float-right'>
           Invite
         </Button>
-      </div>
+      </form>
     </BaseModal>
   );
 };

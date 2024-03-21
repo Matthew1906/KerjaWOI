@@ -3,6 +3,7 @@
 import MemberRow from "./MemberRow";
 
 const MemberTable = ({admin, members})=>{
+  // console.log(members)
     return (
         <div className="z-10 p-2 mt-2 w-100 border">
         <div className="border-b">
@@ -14,16 +15,18 @@ const MemberTable = ({admin, members})=>{
           </ul>
         </div>
         <div>
+          { members?.length==0 && <p className="text-center mt-2 opacity-80">No members found</p>}
           {members.map((member, key) => {
             return (
               <MemberRow
                 key={key}
-                name={member.name}
-                role={member.role}
+                name={member.user.name}
+                role={member.position}
                 permission={member.permission}
-                image={member.image}
-                email={member.email}
+                image={member?.user?.profileImage??"/profile.jpg"}
+                email={member?.user?.email}
                 admin={admin}
+                pending={member.pending}
               />
             );
           })}

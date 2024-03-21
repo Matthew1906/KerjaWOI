@@ -19,12 +19,17 @@ const TeamModal = ({ show, onHideModal, onSubmit }) => {
     if(!result){
       setError('Team name already exist!')
     }
-    formRef.current.reset();
-    router.refresh();
-    onSubmit()
+    else{
+      formRef.current.reset();
+      router.refresh();
+      onSubmit()
+    }
   }
   return (
-    <BaseModal show={show} onHideModal={onHideModal} className="w-5/12">
+    <BaseModal show={show} onHideModal={()=>{
+      setError(false);
+      onHideModal()
+    }} className="w-5/12">
       <form ref={formRef} className="text-dark-purple" onSubmit={handleSubmit}>
         <h3 className="text-center text-xl font-semibold mb-10">Create New Team</h3>
         <label htmlFor='name' className="text-lg font-semibold mb-2">Team Name: </label>

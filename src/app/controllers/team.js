@@ -66,6 +66,25 @@ export const getTeam = async(slug)=>{
     return team;
 }
 
+export const getTeamMembers = async(slug, query)=>{
+    const teamMembers = await prisma.teamMember.findMany({
+        where:{
+            teamName:slug,
+            user:{
+                name: {contains:query, mode:'insensitive'},
+            }
+        },
+        include: { user: true }
+    })
+    const teamLead = await prisma.teamMember.findFirst({
+        where:{
+            teamName:slug,
+            position:'LEAD'
+        }
+    })
+    return {members:teamMembers, lead:teamLead.userName }
+}
+
 const permissionMapping = {
     'can edit': 'EDIT',
     'only view': 'VIEW',
@@ -90,6 +109,38 @@ export const updateTeamSettings = async(slug, formData)=>{
     });
     revalidatePath(`/teams/${slug}/settings`);
     redirect(`/teams/${slug}/settings`);
+}
+
+export const inviteTeamMember = async(data)=>{
+    const { team:slug, email } = data;
+    const team = await prisma.team.findFirst({
+        where: {slug:slug}
+    })
+    const user = await prisma.user.findFirst({
+        where: {email:email}
+    })
+    if(!user){
+        return {
+            status:false,
+            message:'User does not exist!'
+        }
+    }
+    const teamMember = await prisma.teamMember.findFirst({
+        where:{userName:user.slug, teamName:team.slug}
+    })
+    if(teamMember){
+        return {
+            status:false,
+            message:'You have invited this user!'
+        }
+    }
+    await prisma.teamMember.create({
+        data:{
+            userName:user.slug,
+            teamName:team.slug,
+        }
+    })
+    return { status:true }
 }
 
 export const deleteTeam = async(slug)=>{

@@ -31,6 +31,7 @@ const TeamPagination = ({teams})=>{
     return (
         <>
         <div className="z-10 flex flex-row gap-10 flex-wrap justify-center p-2 mt-2">
+            { teams?.length==0 && <p className="text-center mt-2 opacity-80">No teams found</p>}
             {teams.slice((current - 1) * 6, current * 6).map((team, key) => (
                 <TeamCard key={key} team={team} />
             ))}

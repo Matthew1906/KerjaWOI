@@ -59,15 +59,16 @@ enum TeamPosition {
 }
 
 model TeamMember {
-  id       Int           @unique @default(autoincrement())
-  user     User          @relation(fields: [userName], references: [slug], onDelete: Cascade)
-  userName String
-  team     Team          @relation(fields: [teamName], references: [slug], onDelete: Cascade)
-  teamName String
-  pending  Boolean       @default(true)
-  position TeamPosition  @default(MEMBER)
-  meetings Participant[]
-  tasks    Task[]
+  id         Int           @unique @default(autoincrement())
+  user       User          @relation(fields: [userName], references: [slug], onDelete: Cascade)
+  userName   String
+  team       Team          @relation(fields: [teamName], references: [slug], onDelete: Cascade)
+  teamName   String
+  pending    Boolean       @default(true)
+  position   TeamPosition  @default(MEMBER)
+  permission Permission    @default(VIEW)
+  meetings   Participant[]
+  tasks      Task[]
 
   @@id([userName, teamName])
   @@map("team_members")

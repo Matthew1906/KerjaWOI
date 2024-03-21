@@ -7,6 +7,7 @@ const SelectInput = ({
   onChange,
   value = options[0],
   name,
+  disabled
 }) => {
   const select = (e) => onChange(e.target.value);
   return (
@@ -15,6 +16,7 @@ const SelectInput = ({
       value={value}
       onChange={select}
       name={name}
+      disabled={disabled}
     >
       {options.map((option, key) => {
         return (
