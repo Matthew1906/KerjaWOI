@@ -14,3 +14,9 @@ export const base64String = (file)=>{
         reader.onerror = error => reject(error);
       });
 }
+
+export const titleString = (slug)=>{
+  const words = slug.split('-');
+  const capitalizedWords = words.map(word=>word.charAt(0).toUpperCase()+word.slice(1, word.length))
+  return capitalizedWords.join(" ")
+}

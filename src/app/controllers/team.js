@@ -4,18 +4,8 @@ import slugify from "slugify";
 import prisma from "../lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-
-export const getTeams = async(query)=>{
-    const teams = await prisma.team.findMany({
-        where:{ name: {contains:query, mode:'insensitive'} },
-        include: { 
-            members: {
-                include: { user: true }
-            } 
-        }
-    });
-    return teams;
-}
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const createTeam = async(data)=>{
     const { teamName } = data;
@@ -42,4 +32,63 @@ export const createTeam = async(data)=>{
         }
     })
     return true;
+}
+
+export const getTeams = async(query)=>{
+    const teams = await prisma.team.findMany({
+        where:{ name: {contains:query, mode:'insensitive'} },
+        include: { 
+            members: {
+                include: { user: true }
+            } 
+        }
+    });
+    return teams;
+}
+
+export const getTeamSettings = async(slug)=>{
+    const team = await prisma.team.findUnique({
+        where: {slug:slug}
+    })
+    return team;
+}
+
+export const getTeamMembers = async(slug)=>{
+    const team = await prisma.team.findUnique({
+        where: {slug:slug},
+        include: { 
+            members: {
+                include: { user: true }
+            } 
+        }
+    })
+    return team;
+}
+
+const permissionMapping = {
+    'can edit': 'EDIT',
+    'only view': 'VIEW',
+}
+
+const notificationMapping = {
+    "1 day": 'D1',  
+    "3 days": 'D3', 
+    "5 days": 'D5',
+    "1 week": 'W1'
+}
+
+export const updateTeamSettings = async(slug, formData)=>{
+    const name = formData.get('name')
+    const permission = formData.get('permission')
+    const notification = formData.get('notification')
+    await prisma.team.update({
+        where: {slug:slug},
+        data:{
+            name: name,
+            permission: permissionMapping[permission],
+            notification: notificationMapping[notification],
+        }
+    });
+    revalidatePath(`/teams/${slug}/settings`);
+    redirect(`/teams/${slug}/settings`);
 }

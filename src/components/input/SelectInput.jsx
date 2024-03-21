@@ -6,6 +6,7 @@ const SelectInput = ({
   color,
   onChange,
   value = options[0],
+  name,
 }) => {
   const select = (e) => onChange(e.target.value);
   return (
@@ -13,6 +14,7 @@ const SelectInput = ({
       className={`p-2 bg-${color} rounded-md drop-shadow ${className}`}
       value={value}
       onChange={select}
+      name={name}
     >
       {options.map((option, key) => {
         return (
