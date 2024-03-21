@@ -34,9 +34,16 @@ export const createTeam = async(data)=>{
     return true;
 }
 
-export const getTeams = async(query)=>{
+export const getTeams = async(query, user)=>{
     const teams = await prisma.team.findMany({
-        where:{ name: {contains:query, mode:'insensitive'} },
+        where:{ 
+            name: {contains:query, mode:'insensitive'},
+            members: {
+                some:{
+                    userName: user
+                }
+            }
+        },
         include: { 
             members: {
                 include: { user: true }
@@ -46,14 +53,8 @@ export const getTeams = async(query)=>{
     return teams;
 }
 
-export const getTeamSettings = async(slug)=>{
-    const team = await prisma.team.findUnique({
-        where: {slug:slug}
-    })
-    return team;
-}
 
-export const getTeamMembers = async(slug)=>{
+export const getTeam = async(slug)=>{
     const team = await prisma.team.findUnique({
         where: {slug:slug},
         include: { 
@@ -89,4 +90,10 @@ export const updateTeamSettings = async(slug, formData)=>{
     });
     revalidatePath(`/teams/${slug}/settings`);
     redirect(`/teams/${slug}/settings`);
+}
+
+export const deleteTeam = async(slug)=>{
+    await prisma.team.delete({where:{slug:slug}});
+    revalidatePath('/teams');
+    redirect('/teams');
 }

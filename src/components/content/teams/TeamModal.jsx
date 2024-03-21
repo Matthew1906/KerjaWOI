@@ -31,7 +31,7 @@ const TeamModal = ({ show, onHideModal, onSubmit }) => {
         <input
           type="text"
           name='teamName'
-          placeholder="Enter team name"
+          placeholder="Enter team name (permanent)"
           className='grow outline-none p-2 rounded-md drop-shadow my-5 w-100 bg-dark-white'
         />
         {error && <div><p className={`text-left text-Orange ${poppins_600.className}`}>{error}</p></div>}

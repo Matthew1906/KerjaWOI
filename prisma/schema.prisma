@@ -60,9 +60,9 @@ enum TeamPosition {
 
 model TeamMember {
   id       Int           @unique @default(autoincrement())
-  user     User          @relation(fields: [userName], references: [slug])
+  user     User          @relation(fields: [userName], references: [slug], onDelete: Cascade)
   userName String
-  team     Team          @relation(fields: [teamName], references: [slug])
+  team     Team          @relation(fields: [teamName], references: [slug], onDelete: Cascade)
   teamName String
   pending  Boolean       @default(true)
   position TeamPosition  @default(MEMBER)
@@ -81,7 +81,7 @@ enum MeetingType {
 model Meeting {
   id          Int           @id @default(autoincrement())
   title       String        @db.VarChar(50)
-  team        Team          @relation(fields: [teamName], references: [slug])
+  team        Team          @relation(fields: [teamName], references: [slug], onDelete: Cascade)
   teamName    String
   startDate   DateTime
   endDate     DateTime
@@ -93,9 +93,9 @@ model Meeting {
 }
 
 model Participant {
-  meeting   Meeting    @relation(fields: [meetingId], references: [id])
+  meeting   Meeting    @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   meetingId Int
-  member    TeamMember @relation(fields: [memberId], references: [id])
+  member    TeamMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId  Int
 
   @@id([meetingId, memberId])
@@ -104,7 +104,7 @@ model Participant {
 
 model Project {
   id          Int       @id @default(autoincrement())
-  team        Team      @relation(fields: [teamName], references: [slug])
+  team        Team      @relation(fields: [teamName], references: [slug], onDelete: Cascade)
   teamName    String
   name        String    @db.VarChar(200)
   slug        String    @unique @db.VarChar(200)
@@ -116,7 +116,7 @@ model Project {
 
 model Section {
   id        Int     @id @default(autoincrement())
-  project   Project @relation(fields: [projectId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int
   title     String  @db.VarChar(100)
   tasks     Task[]
@@ -126,11 +126,11 @@ model Section {
 
 model Task {
   id               Int          @id @default(autoincrement())
-  section          Section      @relation(fields: [sectionId], references: [id])
+  section          Section      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   sectionId        Int
   title            String       @db.VarChar(100)
   description      String?
-  responsibility   TeamMember   @relation(fields: [responsibilityId], references: [id])
+  responsibility   TeamMember   @relation(fields: [responsibilityId], references: [id], onDelete: Cascade)
   responsibilityId Int
   attachments      Attachment[]
 
@@ -139,7 +139,7 @@ model Task {
 
 model Attachment {
   id     Int   @id @default(autoincrement())
-  task   Task  @relation(fields: [taskId], references: [id])
+  task   Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId Int
   file   Bytes
 }

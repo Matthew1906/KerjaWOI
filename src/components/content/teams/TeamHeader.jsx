@@ -1,5 +1,3 @@
-'use client'
-
 import { AiFillProject } from "react-icons/ai";
 import {
   BsFillPersonFill,
@@ -9,10 +7,10 @@ import {
 import Link from "next/link";
 import { poppins_700 } from "@/app/lib/font";
 
-const TeamHeader = ({team}) => {
+const TeamHeader = async({slug, isLead=true}) => {
   return (
-    <ul className={`navbar flex border-b-2 mt-12 ${poppins_700.className}`}>
-      <Link href={`/teams/${team}`}>
+    <ul className={`navbar flex justify-center border-b-2 mt-12 ${poppins_700.className}`}>
+      <Link href={`/teams/${slug}`}>
       <li
         className="flex items-center 
             text-lg text-Gray 
@@ -23,7 +21,7 @@ const TeamHeader = ({team}) => {
         <span className="ml-1">Projects</span>
       </li>
       </Link>
-      <Link href={`/teams/${team}/members`}>
+      <Link href={`/teams/${slug}/members`}>
       <li
         className="flex items-center 
             text-lg text-Gray 
@@ -34,7 +32,7 @@ const TeamHeader = ({team}) => {
         <span className="ml-1">Members</span>
       </li>
       </Link>
-      <Link href={`/teams/${team}/meetings`}>
+      <Link href={`/teams/${slug}/meetings`}>
       <li
         className="flex items-center 
             text-lg text-Gray 
@@ -45,7 +43,8 @@ const TeamHeader = ({team}) => {
         <span className="ml-1">Meeting</span>
       </li>
       </Link>
-      <Link href={`/teams/${team}/settings`}>
+      { isLead && 
+      <Link href={`/teams/${slug}/settings`}>
       <li
         className="flex items-center 
             text-lg text-Gray 
@@ -56,6 +55,7 @@ const TeamHeader = ({team}) => {
         <span className="ml-1">Settings</span>
       </li>
       </Link>
+      }
     </ul>
   );
 };
