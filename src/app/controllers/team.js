@@ -78,13 +78,11 @@ const notificationMapping = {
 }
 
 export const updateTeamSettings = async(slug, formData)=>{
-    const name = formData.get('name')
     const permission = formData.get('permission')
     const notification = formData.get('notification')
     await prisma.team.update({
         where: {slug:slug},
         data:{
-            name: name,
             permission: permissionMapping[permission],
             notification: notificationMapping[notification],
         }

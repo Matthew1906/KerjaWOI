@@ -12,6 +12,7 @@ export const TeamNameEdit = ({name})=>{
             name="name"
             defaultValue={name}            
             className={`grow outline-none p-2 rounded-md drop-shadow ml-4 bg-dark-white`}
+            disabled
           />
         </span>
     )
