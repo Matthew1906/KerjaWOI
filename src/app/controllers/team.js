@@ -40,7 +40,8 @@ export const getTeams = async(query, user)=>{
             name: {contains:query, mode:'insensitive'},
             members: {
                 some:{
-                    userName: user
+                    userName: user, 
+                    pending:false
                 }
             }
         },
@@ -83,6 +84,14 @@ export const getTeamMembers = async(slug, query)=>{
         }
     })
     return {members:teamMembers, lead:teamLead.userName }
+}
+
+export const getPendingInvitations = async(slug)=>{
+    const pendingInvitations = await prisma.teamMember.findMany({
+        where:{ pending:true, userName:slug},
+        include:{ team: true }
+    })
+    return pendingInvitations;
 }
 
 const permissionMapping = {
@@ -143,8 +152,39 @@ export const inviteTeamMember = async(data)=>{
     return { status:true }
 }
 
+export const joinTeam = async(userSlug, teamSlug)=>{
+    await prisma.teamMember.update({
+        where:{ userName_teamName: { teamName:teamSlug, userName: userSlug }},
+        data:{
+            pending: false
+        }
+    })
+} 
+
+export const updateMemberPermission = async(userSlug, teamSlug, newPermission)=>{
+    await prisma.teamMember.update({
+        where:{ userName_teamName: { teamName:teamSlug, userName: userSlug }},
+        data:{
+            permission: permissionMapping[newPermission]
+        }
+    })
+}
+
+export const updateMemberRole = async(userSlug, teamSlug, newRole)=>{
+    await prisma.teamMember.update({
+        where:{ userName_teamName: { teamName:teamSlug, userName: userSlug }},
+        data:{ position: newRole }
+    })
+}
+
 export const deleteTeam = async(slug)=>{
     await prisma.team.delete({where:{slug:slug}});
     revalidatePath('/teams');
     redirect('/teams');
+}
+
+export const deleteTeamMember = async(teamSlug, userSlug)=>{
+    await prisma.teamMember.delete({
+        where: {userName_teamName: { teamName:teamSlug, userName: userSlug }}
+    })
 }

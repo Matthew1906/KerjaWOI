@@ -59,7 +59,7 @@ const ProfileForm = ({user})=>{
               type="date"
               id="dob"
               name="dob"
-              defaultValue={user.dob.toISOString().split('T')[0]}
+              defaultValue={user?.dob?.toISOString().split('T')[0]??null}
               className="bg-dark-white py-2 px-3 rounded-md"
             />
             <Button type="submit" color='Purple'>

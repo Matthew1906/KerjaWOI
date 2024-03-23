@@ -20,7 +20,7 @@ const SelectInput = ({
     >
       {options.map((option, key) => {
         return (
-          <option key={key} value={option}>
+          <option key={key} value={option} disabled={option==='Admin'}>
             {option}
           </option>
         );

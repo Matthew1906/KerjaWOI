@@ -1,30 +1,37 @@
 'use client'
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiFillDelete, AiOutlineEdit } from "react-icons/ai";
-import { SelectInput, TextInput } from "@/components/input";
+import { SelectInput } from "@/components/input";
+import { deleteTeamMember, updateMemberPermission, updateMemberRole } from "@/app/controllers/team";
 
 const permissionMapping =  {
   'EDIT': 'can edit',
   'VIEW': 'only view',
 }
 
-
-// TODO: Remove team member, change member permission / role
-
-const MemberRow = ({ name, email, role, permission, image, pending, admin }) => {
-    const [currPermission, setPermission] = useState(role==='LEAD'?'Admin':permissionMapping[permission]);
-    console.log()
-    const changePermission = (e) => {
-      setPermission(e);
+const MemberRow = ({ team, name, slug, email, role, permission, image, pending, admin }) => {
+    const router = useRouter();
+    const currentPermission = role==='LEAD'?'Admin':permissionMapping[permission];
+    const [editPermission, setEditPermission] = useState(false);
+    const changePermission = async(newPermission) => {
+      await updateMemberPermission(slug, team, newPermission)
+      setEditPermission(false);
+      router.refresh()
     };
     const [editRole, setEditRole] = useState(false);
-    const [currentRole, setCurrentRole] = useState(role);
-    const changeRole = (value) => {
-      setCurrentRole(value);
+    const changeRole = async(newRole) => {
+      await updateMemberRole(slug, team, newRole)
       setEditRole(false);
+      router.refresh()
     };
+    const handleDelete = async(event)=>{
+      event.preventDefault();
+      await deleteTeamMember(team, slug)
+      router.refresh();
+    }
     return (
       <ul className={`grid grid-cols-10 ${pending?"opacity-50":""}`}>
         <li className="col-span-3 p-3 flex items-center">
@@ -36,32 +43,42 @@ const MemberRow = ({ name, email, role, permission, image, pending, admin }) => 
         </li>
         <li className="col-span-3 p-3 flex items-center">
           {editRole ? (
-            <TextInput placeholder={currentRole} submit={changeRole} />
+            <SelectInput
+              options={['CLIENT', 'MEMBER', 'COLLABORATOR']}
+              value={role}
+              onChange={changeRole}
+              color="white"
+            />
           ) : (
-            <p>{pending?'PENDING':currentRole}</p>
+            <p>{pending?'PENDING':role}</p>
           )}
           {admin && role !== "LEAD" && !pending && !editRole && (
             <AiOutlineEdit onClick={() => setEditRole(true)} />
           )}
         </li>
         <li className="col-span-3 p-3 flex items-center">
-          {admin ? (
+        {editPermission ? (
             <SelectInput
-              options={["Admin", "can edit", "only view"]}
-              value={currPermission}
-              onChange={changePermission}
-              color="white"
-              disabled={role==='LEAD' || pending}
-            />
+            options={["Admin", "can edit", "only view"]}
+            value={currentPermission}
+            onChange={changePermission}
+            color="white"
+            disabled={role==='LEAD' || pending}
+          />
           ) : (
-            <p className="p-2 bg-dark-white rounded-md drop-shadow text-center">
-              {permission}
-            </p>
+            <p>{currentPermission}</p>
+          )}
+          {admin && role !== "LEAD" && !pending && !editPermission && (
+            <AiOutlineEdit onClick={() => setEditPermission(true)} />
           )}
         </li>
         {admin && role !== "LEAD" && (
           <li className="cursor-pointer col p-3 flex justify-center items-center text-xl md:text-2xl text-[#FF0000]">
-            <AiFillDelete className="hover:drop-shadow-lg" />
+            <form onSubmit={handleDelete}>
+              <button>
+                <AiFillDelete className="hover:drop-shadow-lg" />
+              </button>
+            </form>
           </li>
         )}
       </ul>

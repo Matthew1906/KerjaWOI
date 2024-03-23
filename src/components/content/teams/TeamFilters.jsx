@@ -7,10 +7,9 @@ import { Button } from "@/components/utils";
 import { poppins_700 } from "@/app/lib/font";
 import MemberApprovalModal from "../members/MemberApprovalModal";
 
-const TeamFilters = ()=>{
+const TeamFilters = ({invitations})=>{
     const [addTeam, setAddTeam] = useState(false);
     const [approveInvitation, setApproveInvitation] = useState(false);
-    const approveInvitationHandler = () => setApproveInvitation(false);
     return (
     <div className="flex flex-col md:flex-row justify-between items-start mt-4 md:mt-8 gap-2 md:gap-0">
         <SearchFilter
@@ -32,7 +31,7 @@ const TeamFilters = ()=>{
         <MemberApprovalModal
           show={approveInvitation}
           onHideModal={() => setApproveInvitation(false)}
-          onSubmit={approveInvitationHandler}
+          invitations={invitations}
         />
         </div>
       </div>

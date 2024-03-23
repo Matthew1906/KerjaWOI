@@ -7,13 +7,13 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 const Members = async({params, searchParams}) => {
   const slug = params.slug;
   const query = searchParams?.query || '';
-  const { members, lead }= await getTeamMembers(slug, query)
+  const { members, lead }= await getTeamMembers(slug, query);
   const session = await getServerSession(authOptions);
   const isLead = session.slug == lead;
   return (
     <>
       <MemberFilters admin={isLead} team={params.slug}/>
-      <MemberTable members={members} admin={isLead}/>
+      <MemberTable members={members} admin={isLead} team={slug}/>
     </>
   );
 };

@@ -2,8 +2,7 @@
 
 import MemberRow from "./MemberRow";
 
-const MemberTable = ({admin, members})=>{
-  // console.log(members)
+const MemberTable = ({admin, members, team})=>{
     return (
         <div className="z-10 p-2 mt-2 w-100 border">
         <div className="border-b">
@@ -20,7 +19,9 @@ const MemberTable = ({admin, members})=>{
             return (
               <MemberRow
                 key={key}
+                team={team}
                 name={member.user.name}
+                slug={member.user.slug}
                 role={member.position}
                 permission={member.permission}
                 image={member?.user?.profileImage??"/profile.jpg"}
